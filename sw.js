@@ -1,7 +1,8 @@
 /* Service worker — Arabe KIU
    Pour publier une mise à jour : remplace index.html sur GitHub
-   puis change le numéro de VERSION ci-dessous (v1 → v2…). */
-const VERSION = 'arabe-kiu-v2';
+   puis augmente le numéro de version ci-dessous (v3 → v4…). */
+const PREFIX = 'arabe-kiu-';
+const VERSION = PREFIX + 'v3';
 const ASSETS = [
   './', './index.html', './fonts.css', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png',
@@ -15,7 +16,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith(PREFIX) && k !== VERSION).map(k => caches.delete(k))))   // ne touche pas aux caches des autres applis du même domaine
       .then(() => self.clients.claim())
   );
 });
@@ -46,7 +47,7 @@ self.addEventListener('fetch', e => {
 
   e.respondWith(
     caches.match(req, { ignoreSearch: true }).then(hit => hit || fetch(req).then(res => {
-      if (res && res.ok) caches.open(VERSION).then(c => c.put(req, res.clone()));
+      if (res && res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
       return res;
     }))
   );
