@@ -1,7 +1,7 @@
 /* Service worker — Arabe KIU
    Pour publier une mise à jour : remplace index.html sur GitHub
    puis change le numéro de VERSION ci-dessous (v1 → v2…). */
-const VERSION = 'arabe-kiu-v1';
+const VERSION = 'arabe-kiu-v2';
 const ASSETS = [
   './', './index.html', './fonts.css', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png',
